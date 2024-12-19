@@ -3,6 +3,8 @@ export class TimerAudio {
   private audioContext: AudioContext | null = null;
   private oscillator: OscillatorNode | null = null;
   private gainNode: GainNode | null = null;
+  private isPlaying: boolean = false;
+
 
   private constructor() {}
 
@@ -48,13 +50,24 @@ export class TimerAudio {
       this.gainNode.connect(this.audioContext.destination);
       
       // Start and stop the oscillator
-      this.oscillator.start(this.audioContext.currentTime);
-      this.oscillator.stop(this.audioContext.currentTime + 0.5);
       
+      
+       // Start the oscillator
+       this.oscillator.start(this.audioContext.currentTime);
+       
+       this.isPlaying = true;
+      
+
+      setTimeout(() => {
+        if (this.isPlaying) {
+          this.play(); // Recursively restart the oscillato
+        }
+      }, 1000); 
+
       // Cleanup after sound ends
       setTimeout(() => {
         this.cleanup();
-      }, 500);
+      }, 5000);
 
     } catch (error) {
       console.error('Failed to play audio:', error);
@@ -80,5 +93,6 @@ export class TimerAudio {
       this.gainNode.disconnect();
       this.gainNode = null;
     }
+    this.isPlaying = false; //stop playing
   }
 }
