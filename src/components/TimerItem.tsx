@@ -9,12 +9,14 @@ import { TimerAudio } from "../utils/audio";
 import { TimerControls } from "./TimerControls";
 import { TimerProgress } from "./TimerProgress";
 import ReusableButton from "./ReusableButton";
+import { useToast } from "../custom hooks/useToast";
 
 interface TimerItemProps {
   timer: Timer;
 }
 
 export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
+  const {showSuccessToast} =  useToast()
   const { toggleTimer, deleteTimer, updateTimer, restartTimer } =
     useTimerStore();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -29,14 +31,11 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         if (timer.remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
           timerAudio.play().catch(console.error);
-
-          toast.success(`Timer "${timer.title}" has ended! hooray`, {
-            duration: 5000,
-            action: {
-              label: "Dismiss",
-              onClick: () => timerAudio.stop(),
-            },
-          });
+          //Custom hook for toast
+          showSuccessToast(`Timer "${timer.title}" has ended! hooray` , {
+            label: "Dismiss",
+            onClick: () => timerAudio.stop(),
+          }) 
         }
       }, 1000);
     }

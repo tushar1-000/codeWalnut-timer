@@ -23,8 +23,8 @@ function Home() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between mb-8">
           <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-blue-600" />
-            <h1 className="text-md font-bold text-gray-900">Timer App</h1>
+            <Clock className="w-5 h-5 text-blue-600 md:w-8 md:h-8" />
+            <h1 className="text-md font-bold text-gray-900 md:text-3xl">Timer App</h1>
           </div>
           <ReusableButton
             title="Add Timer"

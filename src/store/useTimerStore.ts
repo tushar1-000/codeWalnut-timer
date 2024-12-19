@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Timer } from '../types/timer';
 
 const initialState = {
-  timers: [] as Timer[],
+  timers: JSON.parse(localStorage.getItem('timers') || '[]') as Timer[]
 };
 
 const timerSlice = createSlice({
@@ -16,9 +16,11 @@ const timerSlice = createSlice({
         id: crypto.randomUUID(),
         createdAt: Date.now(),
       });
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
     deleteTimer: (state, action) => {
       state.timers = state.timers.filter(timer => timer.id !== action.payload);
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
     toggleTimer: (state, action) => {
       state.timers = state.timers.map(  (timer)=>{
@@ -27,6 +29,7 @@ const timerSlice = createSlice({
         }
         else return  timer
       })
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
     updateTimer: (state, action) => {
       const timer = state.timers.find(timer => timer.id === action.payload);
@@ -34,6 +37,7 @@ const timerSlice = createSlice({
         timer.remainingTime -= 1;
         timer.isRunning = timer.remainingTime > 0;
       }
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
     restartTimer: (state, action) => {
       const timer = state.timers.find(timer => timer.id === action.payload);
@@ -41,6 +45,7 @@ const timerSlice = createSlice({
         timer.remainingTime = timer.duration;
         timer.isRunning = false;
       }
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
     editTimer: (state, action) => {
       const timer = state.timers.find(timer => timer.id === action.payload.id);
@@ -49,6 +54,7 @@ const timerSlice = createSlice({
         timer.remainingTime = action.payload.updates.duration || timer.duration;
         timer.isRunning = false;
       }
+      localStorage.setItem('timers', JSON.stringify(state.timers));
     },
   },
 });

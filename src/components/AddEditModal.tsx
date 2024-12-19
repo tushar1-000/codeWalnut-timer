@@ -3,8 +3,8 @@ import { X, Clock } from "lucide-react";
 import { useTimerStore } from "../store/useTimerStore";
 import { validateTimerForm } from "../utils/validation";
 import { Timer } from "../types/timer";
-import { addTimer, editTimer } from "../store/useTimerStore";
-import { toast } from "sonner";
+
+import { useToast } from "../custom hooks/useToast";
 interface AddEditModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -19,6 +19,7 @@ function AddEditModal({
   titleHead,
 }: AddEditModalProps) {
   {
+    const { showErrorToast } = useToast();
     const { addTimer, editTimer } = useTimerStore();
 
     const [title, setTitle] = useState(timer.title);
@@ -55,7 +56,17 @@ function AddEditModal({
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
 
-      if (!validateTimerForm({ title, description, hours, minutes, seconds })) {
+      const str = validateTimerForm({
+        title,
+        description,
+        hours,
+        minutes,
+        seconds,
+      });
+      console.log("validation error", str);
+
+      if (str !== "ok") {
+        showErrorToast(str);
         return;
       }
 
