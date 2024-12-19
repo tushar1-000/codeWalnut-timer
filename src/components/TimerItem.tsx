@@ -86,7 +86,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         </div>
 
         <div className="relative">
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-start mb-8 mt-8  h-4">
             <div>
               <h3 className="text-xl font-semibold text-gray-800">
                 {timer.title}
