@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trash2, RotateCcw, Pencil } from "lucide-react";
 import { Timer } from "../types/timer";
 import { formatTime } from "../utils/time";
 import { useTimerStore } from "../store/useTimerStore";
 import { toast } from "sonner";
-import { EditTimerModal } from "./EditTimerModal";
+import AddEditModal from "./AddEditModal";
 import { TimerAudio } from "../utils/audio";
 import { TimerControls } from "./TimerControls";
 import { TimerProgress } from "./TimerProgress";
+import ReusableButton from "./ReusableButton";
 
 interface TimerItemProps {
   timer: Timer;
@@ -33,7 +34,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
             duration: 5000,
             action: {
               label: "Dismiss",
-              onClick: ()=>timerAudio.stop(),
+              onClick: () => timerAudio.stop(),
             },
           });
         }
@@ -94,27 +95,24 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
               <p className="text-gray-600 mt-1">{timer.description}</p>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={() => setIsEditModalOpen(true)}
-                className="p-2 rounded-full hover:bg-blue-50 text-blue-500 transition-colors"
+              <ReusableButton
                 title="Edit Timer"
+                onClick={() => setIsEditModalOpen(true)}
               >
                 <Pencil className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleRestart}
-                className="p-2 rounded-full hover:bg-blue-50 text-blue-500 transition-colors"
-                title="Restart Timer"
-              >
+              </ReusableButton>
+
+              <ReusableButton title="Restart Timer" onClick={handleRestart}>
                 <RotateCcw className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleDelete}
-                className="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors"
+              </ReusableButton>
+
+              <ReusableButton
                 title="Delete Timer"
+                onClick={handleDelete}
+                variant="danger"
               >
                 <Trash2 className="w-5 h-5" />
-              </button>
+              </ReusableButton>
             </div>
           </div>
           <div className="flex flex-col items-center mt-6">
@@ -137,11 +135,12 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         </div>
       </div>
 
-      <EditTimerModal
+      <AddEditModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         timer={timer}
-      />
+        titleHead="Edit"
+      ></AddEditModal>
     </>
   );
 };

@@ -1,36 +1,54 @@
-import { useState } from 'react';
-import { Plus, Clock } from 'lucide-react';
-import { TimerList } from './components/TimerList';
-import { AddTimerModal } from './components/AddTimerModal';
-import { Toaster } from 'sonner';
+import { useState } from "react";
+import { Plus, Clock } from "lucide-react";
+import { TimerList } from "./components/TimerList";
+// import { AddTimerModal } from "./components/AddTimerModal";
+import AddEditModal from "./components/AddEditModal";
+import { Toaster } from "sonner";
+import ReusableButton from "./components/ReusableButton";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const timer = {
+    id: "",
+    title: "",
+    description: "",
+    duration: 0, // in seconds
+    remainingTime: 0,
+    isRunning: false,
+    createdAt: 0,
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Toaster position="top-right" />
       <div className="container mx-auto px-4 py-8">
-        <div className='flex justify-between mb-8'>
+        <div className="flex justify-between mb-8">
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-blue-600" />
             <h1 className="text-md font-bold text-gray-900">Timer App</h1>
           </div>
-          <button
+          <ReusableButton
+            title="Add Timer"
+            variant="addBtn"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-2 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
           >
             <Plus className="w-5 h-5" />
             Add Timer
-          </button>
+          </ReusableButton>
         </div>
-        
+
         <TimerList />
-        
-        <AddTimerModal
+
+        <AddEditModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-        />
+          titleHead="Add"
+          timer={timer}
+        ></AddEditModal>
+
+        {/* <AddTimerModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        /> */}
       </div>
     </div>
   );
