@@ -21,10 +21,12 @@ const timerSlice = createSlice({
       state.timers = state.timers.filter(timer => timer.id !== action.payload);
     },
     toggleTimer: (state, action) => {
-      const timer = state.timers.find(timer => timer.id === action.payload);
-      if (timer) {
-        timer.isRunning = !timer.isRunning;
-      }
+      state.timers = state.timers.map(  (timer)=>{
+        if(timer.id == action.payload){
+          return {...timer , isRunning : !timer.isRunning }
+        }
+        else return  timer
+      })
     },
     updateTimer: (state, action) => {
       const timer = state.timers.find(timer => timer.id === action.payload);
